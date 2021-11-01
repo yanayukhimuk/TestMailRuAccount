@@ -2,8 +2,6 @@
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TestMailRuAccount.WebDriver
 {
@@ -11,33 +9,34 @@ namespace TestMailRuAccount.WebDriver
     {
         public enum BrowserType
         {
-            Chrome,
-            Firefox
-        }
+			Chrome,
+			Firefox
+		}
 
+        [Obsolete]
         public static IWebDriver GetDriver(BrowserType type, int timeOutSec)
         {
-            IWebDriver driver = null;
+			IWebDriver driver = null;
 
-            switch (type)
-            {
-                case BrowserType.Chrome:
-                    {
-                        var service = ChromeDriverService.CreateDefaultService();
-                        var option = new ChromeOptions();
-                        option.AddArgument("disable-infobars");
-                        driver = new ChromeDriver(service, option, TimeSpan.FromSeconds(timeOutSec));
-                        break;
-                    }
-                case BrowserType.Firefox:
-                    {
-                        var service = FirefoxDriverService.CreateDefaultService();
-                        var option = new FirefoxOptions();
-                        driver = new FirefoxDriver(service, option, TimeSpan.FromSeconds(timeOutSec));
-                        break;
-                    }
-            }
-            return driver;
-        }
+			switch (type)
+			{
+				case BrowserType.Chrome:
+					{
+						var service = ChromeDriverService.CreateDefaultService();
+						var option = new ChromeOptions();
+						option.AddArgument("disable-infobars");
+						driver = new ChromeDriver(service, option, TimeSpan.FromSeconds(timeOutSec));
+						break;
+					}
+				case BrowserType.Firefox:
+					{
+						var service = FirefoxDriverService.CreateDefaultService();
+						var options = new FirefoxOptions();
+						driver = new FirefoxDriver(service, options, TimeSpan.FromSeconds(timeOutSec));
+						break;
+					}
+			}
+			return driver;
+		}
     }
 }

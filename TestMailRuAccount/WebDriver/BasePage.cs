@@ -7,20 +7,22 @@ namespace TestMailRuAccount.WebObjects
 {
     public class BasePage
     {
-        protected By _titlelocator;
-        protected string _title;
-        public static string _titleForm;
+        protected By Titlelocator;
+        protected string Title;
+        public static string TitleForm;
 
+        [Obsolete]
         protected BasePage (By TitleLocator, string title)
         {
-            _titlelocator = TitleLocator;
-            _title = _titleForm = title;
+            Titlelocator = TitleLocator;
+            Title = TitleForm = title;
             AssertIsOpen();
         }
 
+        [Obsolete]
         private void AssertIsOpen()
         {
-            var label = new BaseElement(_titlelocator, _title);
+            var label = new BaseElement(Titlelocator, Title);
             label.WaitForIsVisible();
         }
     }

@@ -1,43 +1,44 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using System.Collections.Generic;
-using System.Threading;
 using System.Linq;
-using TestMailRuAccount.WebObjects;
 using TestMailRuAccount.WebDriver;
 
 namespace TestMailRuAccount.WebObjects
 {
     public class MailPage : BasePage
     {
-        private static readonly By MaillBL = By.ClassName("b-titles-outer");
-        public MailPage() : base(MaillBL, "Mail page") { }
+        private static readonly By MaillBL = By.XPath("//span[@class='ph-project__user-name svelte-1xjymf4']");
 
-        private readonly BaseElement _newLetter = new BaseElement(By.XPath("//span[@class='compose-button__txt']"));
-        static private readonly BaseElement _eButtons = new BaseElement(By.XPath("//input[@class='container--H9L5q size_s--3_M-_']"));
-        static private readonly BaseElement _letterButtons = new BaseElement(By.XPath("//span[@class='button2__txt']")); //3
-        static private readonly BaseElement _functionButtons = new BaseElement(By.XPath("//div[@class='container--1HmQy']")); //4
-        static private readonly BaseElement _letterNavButtons = new BaseElement(By.XPath("//div[@class='nav__folder-name__txt']"));
-        static private readonly BaseElement _sentLetters = new BaseElement(By.XPath("//span[@class='ll-crpt']"));
-        static private readonly BaseElement _accountButtons = new BaseElement(By.XPath("//div[@class='ph-text svelte-1vf03eq']"));
+        [System.Obsolete]
+        public MailPage() : base(MaillBL, "jane.black@internet.ru") { }
+
+        private readonly BaseElement NewLetter = new BaseElement(By.XPath("//span[@class='compose-button__txt']"));
+        static private readonly BaseElement ElectrButtons = new BaseElement(By.XPath("//input[@class='container--H9L5q size_s--3_M-_']")); // убрать подчеркивание 
+        static private readonly BaseElement LetterButtons = new BaseElement(By.XPath("//span[@class='button2__txt']")); //3
+        static private readonly BaseElement FunctionButtons = new BaseElement(By.XPath("//div[@class='container--1HmQy']")); //4
+        static private readonly BaseElement LetterNavButtons = new BaseElement(By.XPath("//div[@class='nav__folder-name__txt']"));
+        static private readonly BaseElement SentLetters = new BaseElement(By.XPath("//span[@class='ll-crpt']"));
+        static private readonly BaseElement AccountButtons = new BaseElement(By.XPath("//div[@class='ph-text svelte-1vf03eq']"));
         
 
-        readonly IReadOnlyCollection<BaseElement> emailButtons = _eButtons as IReadOnlyCollection<BaseElement>;
-        readonly IReadOnlyCollection<BaseElement> letterButtons = _letterButtons as IReadOnlyCollection<BaseElement>;
-        readonly IReadOnlyCollection<BaseElement> functionButtons = _functionButtons as IReadOnlyCollection<BaseElement>;
-        readonly IReadOnlyCollection<BaseElement> navigationButtons = _letterNavButtons as IReadOnlyCollection<BaseElement>;
-        readonly IReadOnlyCollection<BaseElement> letterSet = _sentLetters as IReadOnlyCollection<BaseElement>;
-        readonly IReadOnlyCollection<BaseElement> accountButtons = _accountButtons as IReadOnlyCollection<BaseElement>;
+        readonly IReadOnlyCollection<BaseElement> emailButtons = ElectrButtons as IReadOnlyCollection<BaseElement>;
+        readonly IReadOnlyCollection<BaseElement> letterButtons = LetterButtons as IReadOnlyCollection<BaseElement>;
+        readonly IReadOnlyCollection<BaseElement> functionButtons = FunctionButtons as IReadOnlyCollection<BaseElement>;
+        readonly IReadOnlyCollection<BaseElement> navigationButtons = LetterNavButtons as IReadOnlyCollection<BaseElement>;
+        readonly IReadOnlyCollection<BaseElement> letterSet = SentLetters as IReadOnlyCollection<BaseElement>;
+        readonly IReadOnlyCollection<BaseElement> accountButtons = AccountButtons as IReadOnlyCollection<BaseElement>;
+
+        [System.Obsolete]
         public void EnterAddrNameAndEmailTopic(string mes, string emailAddr)
         {
-            _newLetter.Click();
-            Thread.Sleep(2000);
-            var _addrName = emailButtons.ElementAt(1);
-            var _emailTopic = emailButtons.ElementAt(2);
-            _addrName.Click();
-            _addrName.SendKeys(emailAddr);
-            _emailTopic.Click();
-            _emailTopic.SendKeys(mes);
-            Thread.Sleep(2000);
+            NewLetter.Click();
+            var AddrName = emailButtons.ElementAt(1);
+            var EmailTopic = emailButtons.ElementAt(2);
+            AddrName.Click();
+            AddrName.SendKeys(emailAddr);
+            EmailTopic.Click();
+            EmailTopic.SendKeys(mes);
         }
 
         public void WriteALetter(string text)
@@ -46,48 +47,45 @@ namespace TestMailRuAccount.WebObjects
             js.ExecuteScript("document.getElementByClassName('editable-p3tf cke_editable cke_editable_inline cke_contents_true cke_show_borders').click()"); //?
         }
 
+        [System.Obsolete]
         public void SaveLetter()
         {
            letterButtons.ElementAt(3).Click();
-           Thread.Sleep(2000);
         }
 
+        [System.Obsolete]
         public void CloseLetter()
         {
             functionButtons.ElementAt(4).Click();
-            Thread.Sleep(2000);
         }
-
-        public void GoToSaved()
+        [System.Obsolete]
+        public void GoToSaved(string EmailAddr)
         {
             navigationButtons.ElementAt(6).Click();
-            Thread.Sleep(5000);
+            Assert.AreEqual(EmailAddr, GetActualAddr());
         }
-
+        [System.Obsolete]
         public string GetActualAddr()
         {
             var _neededLetter = letterSet.ElementAt(1);
             return _neededLetter.GetAttribute("title").ToString();
         }
-
+        [System.Obsolete]
         public void LogOff()
         {
-            var _emailAddressOnTop = new BaseElement(By.XPath("//span[@class='ph-project__user-name svelte-1xjymf4']"));
-            _emailAddressOnTop.Click();
-            Thread.Sleep(2000);
+            var EmailAddressOnTop = new BaseElement(By.XPath("//span[@class='ph-project__user-name svelte-1xjymf4']"));
+            EmailAddressOnTop.Click();
             accountButtons.ElementAt(3).Click();
-            Thread.Sleep(5000);
+            Assert.That(new BaseElement(By.XPath("//button[@class='ph-login svelte-1xjymf4']")).Displayed);
         }
-
-        public void SendSavedLetter()
+        [System.Obsolete]
+        public void SendSavedLetter(string EmailAddr)
         {
-            var _neededLetter = letterSet.ElementAt(3);
-            _neededLetter.Click();
-            Thread.Sleep(2000);
+            var NeededLetter = letterSet.ElementAt(3);
+            NeededLetter.Click();
             letterButtons.ElementAt(1).Click();
-            Thread.Sleep(5000);
             navigationButtons.ElementAt(5).Click();
-            Thread.Sleep(5000);
+            Assert.AreEqual(EmailAddr, GetActualAddr());
         }
     }
 }
