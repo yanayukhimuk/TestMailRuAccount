@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Remote;
 using System;
 
 namespace TestMailRuAccount.WebDriver
@@ -10,7 +11,9 @@ namespace TestMailRuAccount.WebDriver
         public enum BrowserType
         {
 			Chrome,
-			Firefox
+			Firefox,
+			remoteChrome,
+			remoteFirefox
 		}
 
         [Obsolete]
@@ -35,7 +38,23 @@ namespace TestMailRuAccount.WebDriver
 						driver = new FirefoxDriver(service, options, TimeSpan.FromSeconds(timeOutSec));
 						break;
 					}
-			}
+                case BrowserType.remoteChrome:
+                    {
+                        var option = new ChromeOptions();
+						option.AddArgument("disable-infobars");
+						option.AddArgument("--no-sandbox");
+						driver = new RemoteWebDriver(new Uri("http://localhost:5566/wd/hub"), option.ToCapabilities());
+                        break;
+                    }
+                case BrowserType.remoteFirefox:
+                    {
+						var option = new FirefoxOptions();
+						option.AddArgument("disable-infobars");
+						option.AddArgument("--no-sandbox");
+						driver = new RemoteWebDriver(new Uri("http://localhost:5566/wd/hub"), option.ToCapabilities());
+						break;
+					}
+            }
 			return driver;
 		}
     }

@@ -5,52 +5,52 @@ namespace TestMailRuAccount.WebDriver
 {
     public class Browser
     {
-		private static Browser _currentInstane;
-		private static IWebDriver _driver;
+		private static Browser CurrentInstane;
+		private static IWebDriver Driver;
         public static BrowserFactory.BrowserType CurrentBrowser;
 		public static int ImplWait;
 		public static double TimeoutForElement;
-		private static string _browser;
+		private static string newBrowser;
 
         [Obsolete]
         private Browser()
 		{
 			InitParamas();
-			_driver = BrowserFactory.GetDriver(CurrentBrowser, ImplWait);
+			Driver = BrowserFactory.GetDriver(CurrentBrowser, ImplWait);
 		}
 
 		private static void InitParamas()
 		{
 			ImplWait = Convert.ToInt32(Configuration.ElementTimeout);
 			TimeoutForElement = Convert.ToDouble(Configuration.ElementTimeout);
-			_browser = Configuration.Browser;
-            _ = Enum.TryParse(_browser, out CurrentBrowser);
+			newBrowser = Configuration.Browser;
+            _ = Enum.TryParse(newBrowser, out CurrentBrowser);
 		}
 
         [Obsolete]
-        public static Browser Instance => _currentInstane ?? (_currentInstane = new Browser());
+        public static Browser Instance => CurrentInstane ?? (CurrentInstane = new Browser());
 
 		public static void WindowMaximise()
 		{
-			_driver.Manage().Window.Maximize();
+			Driver.Manage().Window.Maximize();
 		}
 
 		public static void NavigateTo(string url)
 		{
-			_driver.Navigate().GoToUrl(url);
+			Driver.Navigate().GoToUrl(url);
 		}
 
 		public static IWebDriver GetDriver()
 		{
-			return _driver;
+			return Driver;
 		}
 
 		public static void Quit()
 		{
-			_driver.Quit();
-			_currentInstane = null;
-			_driver = null;
-			_browser = null;
+			Driver.Quit();
+			CurrentInstane = null;
+			Driver = null;
+			newBrowser = null;
 		}
 	}
 }

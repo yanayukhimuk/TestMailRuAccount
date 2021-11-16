@@ -8,7 +8,7 @@ namespace TestMailRuAccount
         readonly string Login = "jane.black@internet.ru";
         readonly string Password = "CatAndDogs1999";
         string LetterTopic = "Noting special";
-        string Message = "Hello!";
+        const string Message = "Hello, Yana! How are you?";
         string EmailAddr = "yana.ryzhikova.brest.belarus@gmail.com";
 
 
@@ -29,14 +29,16 @@ namespace TestMailRuAccount
 #pragma warning restore CA1041 // Provide ObsoleteAttribute message
         public void EmailDraftTest()
         {
-            MailPage mailPage = new();
             HomePage homePage = new();
             homePage.LoginInMailBox(Login, Password);
             homePage.AssertHasLoaded();
+
+            MailPage mailPage = new();
+            mailPage.EnterAddrNameAndEmailTopic(LetterTopic, EmailAddr);
             //mailPage.WriteALetter(Message);
-            mailPage.SaveLetter();
-            mailPage.CloseLetter();
-            mailPage.GoToSaved(EmailAddr);
+            //mailPage.SaveLetter();
+            //mailPage.CloseLetter();
+            //mailPage.GoToSaved(EmailAddr);
         }
 
         [Test]
@@ -57,10 +59,10 @@ namespace TestMailRuAccount
         [System.Obsolete]
         public void LogOffTest()
         {
-            MailPage mailPage = new();
             HomePage homePage = new();
             homePage.LoginInMailBox(Login, Password);
             homePage.AssertHasLoaded();
+            MailPage mailPage = new();
             mailPage.LogOff();
         }
 

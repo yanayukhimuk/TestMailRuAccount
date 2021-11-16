@@ -12,7 +12,7 @@ namespace TestMailRuAccount.WebDriver
             return ConfigurationManager.AppSettings[var] ?? defaultValue;
         }
 
-        public static string ElementTimeout => GetEnvironmentVar("ElementTimeout", "30");
+        public static string ElementTimeout => GetEnvironmentVar("ElementTimeout", "50");
 
         public static string Browser => GetEnvironmentVar("Browser", "Chrome");
 

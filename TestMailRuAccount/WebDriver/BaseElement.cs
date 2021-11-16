@@ -16,8 +16,8 @@ namespace TestMailRuAccount.WebObjects
         [Obsolete]
         public BaseElement(By locator, string name)
 		{
-			this.Locator = locator;
-			this.Name = name == "" ? GetText() : name;
+			Locator = locator;
+			Name = name == "" ? GetText() : name;
 		}
 
 		public BaseElement(By locator)
@@ -46,12 +46,23 @@ namespace TestMailRuAccount.WebObjects
 			return Element;
 		}
 
-        [Obsolete]
-        public void WaitForIsVisible() => _ = new WebDriverWait(Browser.GetDriver(), TimeSpan.FromSeconds(Browser.TimeoutForElement)).Until(c => c.FindElement(Locator));
+		public void WaitForIsVisible()
+        {
+			var driver = Browser.GetDriver();
+			_ = new WebDriverWait(driver, TimeSpan.FromSeconds(Browser.TimeoutForElement)).Until(driver => driver.FindElement(Locator).Displayed);
+        }
 
+		public void WaitForIsClickable()
+        {
+			var driver = Browser.GetDriver();
+			_ = new WebDriverWait(driver, TimeSpan.FromSeconds(Browser.TimeoutForElement)).Until(driver => driver.FindElement(Locator).Enabled);
+
+		}
         public IWebElement FindElement(By @by)
 		{
-			throw new System.NotImplementedException();
+			var driver = Browser.GetDriver();
+			IWebElement element = driver.FindElement(Locator);
+			return element;
 		}
 
 		public ReadOnlyCollection<IWebElement> FindElements(By @by)
@@ -65,10 +76,18 @@ namespace TestMailRuAccount.WebObjects
 		}
 
         [Obsolete]
-        public void SendKeys(string text)
+        public void SendKeys(string text) //ругается тут - Element is not interactable 
 		{
 			WaitForIsVisible();
 			Browser.GetDriver().FindElement(Locator).SendKeys(text);
+		}
+
+        [Obsolete]
+        public void JsSendKeys(string text)
+        {
+			WaitForIsVisible();
+			IJavaScriptExecutor executor = (IJavaScriptExecutor)Browser.GetDriver();
+			executor.ExecuteScript("arguments[0].sendKeys();", this.GetElement());
 		}
 
 		public void Submit()
@@ -106,7 +125,22 @@ namespace TestMailRuAccount.WebObjects
 			throw new NotImplementedException();
 		}
 
-		public string TagName { get; }
+        public string GetDomAttribute(string attributeName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetDomProperty(string propertyName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ISearchContext GetShadowRoot()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string TagName { get; }
 		public string Text { get; }
 		public bool Enabled { get; }
 		public bool Selected { get; }

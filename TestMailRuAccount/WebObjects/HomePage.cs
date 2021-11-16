@@ -16,13 +16,14 @@ namespace TestMailRuAccount.WebObjects
         [System.Obsolete]
         public void LoginInMailBox (string Login, string Password)
         {
+            HomePage.Login.WaitForIsVisible();
             HomePage.Login.Click();
             HomePage.Login.SendKeys(Login);
-            NextButtonToEnterPassword.JsClick();
+            NextButtonToEnterPassword.Click();
 
+            HomePage.Password.WaitForIsVisible();
             HomePage.Password.SendKeys(Password);
-            ConfirmButton.JsClick();
-
+            ConfirmButton.Click();
         }
 
         [System.Obsolete]
