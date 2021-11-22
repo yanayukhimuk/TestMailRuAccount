@@ -7,7 +7,7 @@ namespace TestMailRuAccount
     {
         readonly string Login = "jane.black@internet.ru";
         readonly string Password = "CatAndDogs1999";
-        string LetterTopic = "Noting special";
+        string LetterTopic = "Nothing special";
         const string Message = "Hello, Yana! How are you?";
         string EmailAddr = "yana.ryzhikova.brest.belarus@gmail.com";
 
@@ -36,9 +36,10 @@ namespace TestMailRuAccount
             MailPage mailPage = new();
             mailPage.EnterAddrNameAndEmailTopic(LetterTopic, EmailAddr);
             //mailPage.WriteALetter(Message);
-            //mailPage.SaveLetter();
-            //mailPage.CloseLetter();
-            //mailPage.GoToSaved(EmailAddr);
+            mailPage.SaveLetter();
+            mailPage.CloseLetter();
+            mailPage.GoToSaved();
+            mailPage.IfIsPresentAsDraft();
         }
 
         [Test]
@@ -51,7 +52,7 @@ namespace TestMailRuAccount
             HomePage homePage = new();
             homePage.LoginInMailBox(Login, Password);
             homePage.AssertHasLoaded();
-            mailPage.GoToSaved(EmailAddr);
+            mailPage.GoToSaved();
             mailPage.SendSavedLetter(EmailAddr);
         }
 

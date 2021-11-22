@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using TestMailRuAccount.WebDriver;
@@ -60,14 +61,20 @@ namespace TestMailRuAccount.WebObjects
 		}
         public IWebElement FindElement(By @by)
 		{
-			var driver = Browser.GetDriver();
-			IWebElement element = driver.FindElement(Locator);
-			return element;
+			Element = Browser.GetDriver().FindElement(Locator);
+			return Element;
 		}
 
-		public ReadOnlyCollection<IWebElement> FindElements(By @by)
+		public ReadOnlyCollection<IWebElement> FindElements(By @by) 
 		{
-			throw new System.NotImplementedException();
+            if (by is null)
+            {
+                throw new ArgumentNullException(nameof(by));
+            }
+
+            Element = Browser.GetDriver().FindElement(Locator);
+			ReadOnlyCollection<IWebElement> collection = Element as ReadOnlyCollection<IWebElement>;
+			return collection;
 		}
 
 		public void Clear()

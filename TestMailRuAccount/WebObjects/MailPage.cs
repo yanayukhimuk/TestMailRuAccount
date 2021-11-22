@@ -14,20 +14,17 @@ namespace TestMailRuAccount.WebObjects
         [System.Obsolete]
         public MailPage() : base(MaillBL, "Написать письмо") { }
 
+        IJavaScriptExecutor js = Browser.GetDriver() as IJavaScriptExecutor;
+
         static private readonly BaseElement NewLetter = new(By.XPath("//span[@class='compose-button__txt']"));
-        static private readonly BaseElement ToWhom = new(By.XPath("//input[@class='container--H9L5q size_s--3_M-_']")); 
+        static private readonly BaseElement ToWhom = new(By.XPath("//input[@class='container--H9L5q size_s--3_M-_']"));
         static private readonly BaseElement EmailTopic = new(By.Name("Subject"));
         static private readonly BaseElement WriteLetter = new(By.TagName("br"));
-        static private readonly BaseElement LetterButtons = new(By.XPath("//span[@class='button2__txt']")); //3
-        static private readonly BaseElement FunctionButtons = new(By.XPath("//div[@class='container--1HmQy']")); //4
         static private readonly BaseElement LetterNavButtons = new(By.XPath("//div[@class='nav__folder-name__txt']"));
         static private readonly BaseElement SentLetters = new(By.XPath("//span[@class='ll-crpt']"));
         static private readonly BaseElement AccountButtons = new(By.XPath("//div[@class='ph-text svelte-1vf03eq']"));
-        
 
-        //readonly IReadOnlyCollection<BaseElement> emailButtons = ElectrButtons as IReadOnlyCollection<BaseElement>;
-        readonly IReadOnlyCollection<BaseElement> letterButtons = LetterButtons as IReadOnlyCollection<BaseElement>;
-        readonly IReadOnlyCollection<BaseElement> functionButtons = FunctionButtons as IReadOnlyCollection<BaseElement>;
+
         readonly IReadOnlyCollection<BaseElement> navigationButtons = LetterNavButtons as IReadOnlyCollection<BaseElement>;
         readonly IReadOnlyCollection<BaseElement> letterSet = SentLetters as IReadOnlyCollection<BaseElement>;
         readonly IReadOnlyCollection<BaseElement> accountButtons = AccountButtons as IReadOnlyCollection<BaseElement>;
@@ -54,26 +51,29 @@ namespace TestMailRuAccount.WebObjects
         [System.Obsolete]
         public void SaveLetter()
         {
-           letterButtons.ElementAt(3).Click();
+            var LetterButtons = Browser.GetDriver().FindElements(By.XPath("//span[@class='button2__txt']"));
+            LetterButtons.ElementAt(3).Click();
         }
 
         [System.Obsolete]
         public void CloseLetter()
         {
-            functionButtons.ElementAt(4).Click();
+            var FunctionButtons = Browser.GetDriver().FindElements(By.XPath("//div[@class='container--1HmQy']"));
+            FunctionButtons.ElementAt(4).Click();
         }
         [System.Obsolete]
-        public void GoToSaved(string EmailAddr)
+        public void GoToSaved()
         {
-            navigationButtons.ElementAt(6).Click();
-            Assert.AreEqual(EmailAddr, GetActualAddr());
+            var FilterButton = Browser.GetDriver().FindElement(By.XPath("//span[@class='filters-control__filter-text']"));
+            Browser.NavigateTo("https://e.mail.ru/drafts/");
+            Assert.That(FilterButton.Displayed);
         }
-        [System.Obsolete]
-        public string GetActualAddr()
+        public void IfIsPresentAsDraft()
         {
-            var _neededLetter = letterSet.ElementAt(1);
-            return _neededLetter.GetAttribute("title").ToString();
+            var LastSavedLetterList = Browser.GetDriver().FindElements(By.XPath("//span[@title='yana.ryzhikova.brest.belarus@gmail.com']"));
+            Assert.That(LastSavedLetterList.ElementAt(1).Displayed);
         }
+
         [System.Obsolete]
         public void LogOff()
         {
@@ -87,9 +87,9 @@ namespace TestMailRuAccount.WebObjects
         {
             var NeededLetter = letterSet.ElementAt(3);
             NeededLetter.Click();
-            letterButtons.ElementAt(1).Click();
+            //letterButtons.ElementAt(1).Click();
             navigationButtons.ElementAt(5).Click();
-            Assert.AreEqual(EmailAddr, GetActualAddr());
+            //Assert.AreEqual(EmailAddr, IfIsPresentAsDraft());
         }
     }
 }

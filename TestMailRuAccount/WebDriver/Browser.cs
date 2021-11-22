@@ -13,13 +13,13 @@ namespace TestMailRuAccount.WebDriver
 		private static string newBrowser;
 
         [Obsolete]
-        private Browser()
+        public Browser()
 		{
 			InitParamas();
 			Driver = BrowserFactory.GetDriver(CurrentBrowser, ImplWait);
 		}
 
-		private static void InitParamas()
+		public static void InitParamas()
 		{
 			ImplWait = Convert.ToInt32(Configuration.ElementTimeout);
 			TimeoutForElement = Convert.ToDouble(Configuration.ElementTimeout);
