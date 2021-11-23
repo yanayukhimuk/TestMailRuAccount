@@ -4,6 +4,7 @@ namespace TestMailRuAccount.WebObjects
     public class HomePage : BasePage
     {
         private static readonly By MailRuLbl = By.XPath("//div[@class='logo svelte-1kkb4qr']");
+        
 
         [System.Obsolete]
         public HomePage() : base(MailRuLbl, "Mail.ru") { }
